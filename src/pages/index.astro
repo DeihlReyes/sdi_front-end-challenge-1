@@ -1,0 +1,55 @@
+---
+import NewsItem from '../components/NewsItem.astro';
+import PaginationControl from '../components/PaginationControl.astro';
+import Layout from '../layouts/Layout.astro';
+import type { NewsData, AuthorData, NewsItemData } from '../types';
+
+const newsUrl = 'https://tmsph-sdi-challenges.pages.dev/challenges/news.json';
+const authorUrl = 'https://tmsph-sdi-challenges.pages.dev/challenges/authors.json';
+
+const fetchNewsData = async (): Promise<NewsItemData[]> => {
+    const newsResponse = await fetch(newsUrl);
+    const newsItems = await newsResponse.json() as NewsData[];
+
+    const authorResponse = await fetch(authorUrl);
+    const authors = await authorResponse.json() as AuthorData[];
+
+    const newsItemsWithAuthors = newsItems.map((newsItem) => {
+        const author = authors.find((author) => author.id === newsItem.author_id);
+        return {
+            ...newsItem,
+            author_name: author ? author.name : 'Unknown',
+        };
+    });
+
+    return newsItemsWithAuthors;
+};
+
+const newsItems = await fetchNewsData();
+const newsItemData = newsItems[0];
+console.log(newsItems);
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+		<NewsItem
+			author_name={newsItemData.author_name}
+			title={newsItemData.title}
+			body={newsItemData.body}
+			image_url=`/src/assets/${newsItemData.image_url}`
+			created_at={new Date(newsItemData.created_at)}
+		/>
+		<PaginationControl />
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		width: fit-content;
+		max-width: calc(100% - 2rem);
+		color: black;
+		height: fit-content;
+	}
+	
+</style>

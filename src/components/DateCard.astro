@@ -1,0 +1,47 @@
+---
+interface Props {
+  created_date: {
+    month: string;
+    day: number;
+  };
+}
+
+const { month, day } = Astro.props.created_date;
+---
+<style>
+  div {
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    transform: translate(-70%, 30%);
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+    background-color: rgb(255, 0, 0);
+    padding: 0 40px 0 40px;
+    border-radius: 4px;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    color: #ffffff;
+    line-height: 0%;
+  }
+
+  .day {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+  }
+
+  .month {
+    font-weight: 300;
+    font-size: 1.5rem;
+    margin-top: 0;
+  }
+
+</style>
+
+<div>
+  <p class="day">{day}</p>
+  <p class="month">{month}</p>
+</div>
